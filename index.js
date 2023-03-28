@@ -1,6 +1,16 @@
 require('dotenv/config')
 const { Client, IntentsBitField } = require('discord.js');
 const { Configuration, OpenAIApi } = require('openai');
+const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => {
+    res.send('Working...')
+});
+
+app.listen(3000, () => {
+    console.log('Running...')
+});
 
 const client = new Client({
     intents: [
@@ -22,6 +32,7 @@ const openai = new OpenAIApi(configuration);
 
 client.on('messageCreate', async (message) => {
     if (message.author.bot) return;
+    if (message.channel.id !== process.env.CHANNEL_ID) return;
     
     let conversationLog = [{role: 'system', content: 'Dr. Vegapunk AI'}];
 
